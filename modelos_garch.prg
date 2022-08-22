@@ -23,3 +23,12 @@ series res_n_arch_st_sq=res_n_arch_st^2
 'FAC e FACP dos resíduos ao quadrado
 freeze(g3) res_n_arch_st_sq.correl(12)
 show g3
+ modelo arch com distribuição t-Student
+equation t_archdibv
+t_archdibv.arch(1,0,tdist) dlibovm c 
+show t_archdibv
+t_archdibv.makegarch volatilidade_t_arch
+volatilidade_t_arch=@sqrt(volatilidade_t_arch)
+graph g4 volatilidade_t_arch
+g4.addtext(t,ac)  "Volatilidade para RCPIBOV usando t-GARCH"
+show g4
