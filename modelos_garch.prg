@@ -75,3 +75,18 @@ series res_ged_arch_st_sq=res_ged_arch_st^2
 'FAC e FACP dos resíduos ao quadrado
 freeze(tab6) res_ged_arch_st_sq.correl(12)
 show tab6
+
+
+
+' modelo garch distribuição normal
+equation garchdibv
+freeze(out_n_garch) garchdibv.arch(1,1) dlibovm c 
+show out_n_garch
+out_n_garch.save(t=tex)  "C:\Users\Pedro\Dropbox\Topicos_em_Financas_2022\garch_model\EVIEWS\n_garch.tex"
+
+garchdibv.makegarch volatilidadegarch
+volatilidadegarch=@sqrt(volatilidadegarch)
+graph g4 volatilidadegarch
+g4.addtext(t,ac)  "Volatilidade para RCPIBOV usando N_GARCH(1,1)"
+show g4 
+
