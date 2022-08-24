@@ -90,3 +90,14 @@ graph g4 volatilidadegarch
 g4.addtext(t,ac)  "Volatilidade para RCPIBOV usando N_GARCH(1,1)"
 show g4 
 
+' Adequabilidade do modelo
+garchdibv.makeresids(s) res_n_garch_st
+' FAC e FACP residuos padronizados
+freeze(tab7) res_n_garch_st.correl(12)
+show tab7
+' Define os resíduos ao quadrado
+series res_n_garch_st_sq=res_n_garch_st^2
+
+'FAC e FACP dos resíduos ao quadrado
+freeze(tab8)res_n_garch_st_sq.correl(12)
+show tab8
