@@ -101,3 +101,16 @@ series res_n_garch_st_sq=res_n_garch_st^2
 'FAC e FACP dos resíduos ao quadrado
 freeze(tab8)res_n_garch_st_sq.correl(12)
 show tab8
+
+
+' Estimo modelos da classe IGARCH(1,1) 
+equation igarchibv
+freeze(out_n_igarch) igarchibv.arch(1,1,integrated) dlibovm c 
+show(out_n_igarch)
+out_n_igarch.save(t=tex)  "C:\Users\Pedro\Dropbox\Topicos_em_Financas_2022\garch_model\EVIEWS\n_igarch.tex"
+
+igarchibv.makegarch volatilidadeigarch
+volatilidadeigarch=@sqrt(volatilidadeigarch)
+graph g5 volatilidadeigarch
+g5.addtext(t,ac)  "Volatilidade para RCPIBOV usando N_IGARCH(1,1)"
+show g5
