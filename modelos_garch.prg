@@ -169,6 +169,22 @@ show tab12
 
 
 
+' Previsão
+' estima o N-GARCH sem as ultimas 10 observaçoes
+smpl @first @last-10
+garchdibv.arch(1,1) dlibovm c 
+smpl @last-9 @last
+garchdibv.forecast fibvgarch se fibvgarchvar
+series fibvgarchls=fibvgarch+1.96*@sqrt(fibvgarchvar)
+series fibvgarchli=fibvgarch-1.96*@sqrt(fibvgarchvar)
+group previsaogarch fibvgarch fibvgarchli fibvgarchls dlibovm
+graph g66 previsaogarch
+show g66
+smpl @all
+
+
+
+
 ' modelo de volatilidade estoc ´astica
 ' cria a s ´erie do log dos retornos ao quadrado ajustados pela media
 series lqdibvfm =log(dlibovm^2)
@@ -203,15 +219,4 @@ show graph1
 series volatilidadesv=@sqrt(exp(vehf))
 
 
-' Previsão
-pagestruct(end=@last+10) *
-smpl @last-9 @last
-garchdibv.forecast fibvgarch se fibvgarchvar
-series fibvgarchls=fibvgarch+1.96*@sqrt(fibvgarchvar)
-series fibvgarchli=fibvgarch-1.96*@sqrt(fibvgarchvar)
-group previsaogarch fibvgarch fibvgarchli fibvgarchls
-graph g66 previsaogarch
-show g66
-smpl @all
-pagestruct(end=@last-10) *
 
