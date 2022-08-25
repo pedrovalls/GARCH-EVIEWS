@@ -140,3 +140,65 @@ series res_egarch_st_sq=res_egarch_st^2
 'FAC e FACP dos resíduos ao quadrado
 freeze(tab10) res_egarch_st_sq.correl(12)
 show tab10
+
+
+' modelo limiar garch
+equation tgarchibv
+freeze(out_n_tgarch)  tgarchibv.arch(1,1,thrsh=1) dlibovm c 
+show out_n_tgarch
+out_n_tgarch.save(t=tex)  "C:\Users\Pedro\Dropbox\Topicos_em_Financas_2022\garch_model\EVIEWS\n_tgarch.tex"
+
+
+tgarchibv.makegarch volatilidadetgarch
+volatilidadetgarch=@sqrt(volatilidadetgarch)
+graph g7 volatilidadetgarch
+g7.addtext(t,ac)  "Volatilidade para RCPIBOV usando N_TGARCH(1,1)"
+show g7
+
+
+' modelo de volatilidade estoc ´astica
+' cria a s ´erie do log dos retornos ao quadrado ajustados pela media
+series lqdibvfm =log(dlibovm^2)
+' fixo a variancia da equa ¸cao como o log da distribui ¸c~ao quadrado
+!pi = @acos(-1)
+scalar s2 = 0.5*!pi*!pi
+' crio o objeto de espa ¸co de estado no eviews para a estimacao por quasi-m ´axima verossimilhanca
+sspace volatilidadeestocastica
+volatilidadeestocastica.append @signal lqdibvfm= -1.27 + ht + [var=s2]
+volatilidadeestocastica.append @state ht = c(1) + c(2)*ht(-1) + [var=exp(c(3))]
+' valores iniciais
+c(1) = 0.01
+c(2) = 0.85
+c(3) = 0.1
+ ' estimo por usando maxima verossimilhança
+volatilidadeestocastica.ml
+volatilidadeestocastica.makestate(t=pred) vehf
+volatilidadeestocastica.makestate(t=predse) vehfse
+volatilidadeestocastica.makestate(t=filt) veht
+volatilidadeestocastica.makestate(t=filtse) vehtse
+volatilidadeestocastica.makestate(t=smooth) vehs
+volatilidadeestocastica.makestate(t=smoothse) vehsse
+' gr ´afico comparando a log volatilidade dos modelos sv e garch
+graph graph1.line log(volatilidadegarch^2) vehf vehs
+' graph1.options size(8,2)
+graph1.addtext(0.1,-0.3) Log Volatilidade
+graph1.setelem(1) legend(GARCH(1,1))
+graph1.setelem(2) legend(Volatilidade Estocástica - Um Passo a Frente)
+graph1.setelem(3) legend(Volatilidade Estocástica - Suavizada)
+' graph1.legend columns(1) position(0,0)
+show graph1
+series volatilidadesv=@sqrt(exp(vehf))
+
+
+' Previsão
+pagestruct(end=@last+10) *
+smpl @last-9 @last
+garchdibv.forecast fibvgarch se fibvgarchvar
+series fibvgarchls=fibvgarch+1.96*@sqrt(fibvgarchvar)
+series fibvgarchli=fibvgarch-1.96*@sqrt(fibvgarchvar)
+group previsaogarch fibvgarch fibvgarchli fibvgarchls
+graph g66 previsaogarch
+show g66
+smpl @all
+pagestruct(end=@last-10) *
+
