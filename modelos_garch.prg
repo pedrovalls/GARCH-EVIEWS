@@ -155,6 +155,19 @@ graph g7 volatilidadetgarch
 g7.addtext(t,ac)  "Volatilidade para RCPIBOV usando N_TGARCH(1,1)"
 show g7
 
+' Adequabilidade do modelo
+tgarchdibv.makeresids(s) res_tgarch_st
+' FAC e FACP residuos padronizados
+freeze(tab11) res_tgarch_st.correl(12)
+show tab11
+' Define os resíduos ao quadrado
+series res_tgarch_st_sq=res_tgarch_st^2
+
+'FAC e FACP dos resíduos ao quadrado
+freeze(tab12) res_tgarch_st_sq.correl(12)
+show tab12
+
+
 
 ' modelo de volatilidade estoc ´astica
 ' cria a s ´erie do log dos retornos ao quadrado ajustados pela media
