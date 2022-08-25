@@ -114,3 +114,16 @@ volatilidadeigarch=@sqrt(volatilidadeigarch)
 graph g5 volatilidadeigarch
 g5.addtext(t,ac)  "Volatilidade para RCPIBOV usando N_IGARCH(1,1)"
 show g5
+
+
+' Estima um moddelo EGARCH
+equation egarchdibv
+freeze(out_n_egarch) egarchdibv.arch(1,1,e) dlibovm c 
+show out_n_egarch
+out_n_egarch.save(t=tex)  "C:\Users\Pedro\Dropbox\Topicos_em_Financas_2022\garch_model\EVIEWS\n_egarch.tex"
+
+egarchdibv.makegarch volatilidadeegarch
+volatilidadeegarch=@sqrt(volatilidadeegarch)
+graph g6 volatilidadeegarch
+g6.addtext(t,ac)  "Volatilidade para RCPIBOV usando N_EGARCH(1,1)"
+show g6
