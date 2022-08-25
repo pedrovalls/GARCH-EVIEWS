@@ -127,3 +127,16 @@ volatilidadeegarch=@sqrt(volatilidadeegarch)
 graph g6 volatilidadeegarch
 g6.addtext(t,ac)  "Volatilidade para RCPIBOV usando N_EGARCH(1,1)"
 show g6
+
+
+' Adequabilidade do modelo
+egarchdibv.makeresids(s) res_egarch_st
+' FAC e FACP residuos padronizados
+freeze(tab9) res_egarch_st.correl(12)
+show tab9
+' Define os resíduos ao quadrado
+series res_egarch_st_sq=res_egarch_st^2
+
+'FAC e FACP dos resíduos ao quadrado
+freeze(tab10) res_egarch_st_sq.correl(12)
+show tab10
